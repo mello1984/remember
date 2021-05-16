@@ -13,12 +13,14 @@
         <label>Дата: ${record.getDate()}</label><br>
         <label>Текст: </label><label><input type="text" name="text" value="${record.getText()}"></label><br>
         <label>Тег: </label><label><input type="text" name="tag" value="${record.getTag()}"></label><br>
+        <input type="hidden" name="_csrf" value="${_csrf.token}"/>
         <button type="submit">Отправить</button>
     </form>
 </div>
 <br><br>
 <div>
     <form method="post" action="${record.getId()}/delete">
+        <input type="hidden" name="_csrf" value="${_csrf.token}"/>
         <button type="submit"> Удалить запись</button>
     </form>
 </div>

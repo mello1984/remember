@@ -5,12 +5,19 @@
     <title>Вспомнить все</title>
 </head>
 <body>
+
+<form action="/logout" method="post">
+    <input type="hidden" name="_csrf" value="${_csrf.token}"/>
+    <input type="submit" value="Sign Out"/>
+</form>
+
 <h3>Список записей</h3>
 <br><br>
 <div>
     <form method="post">
         <label><input type="text" name="text" placeholder="Введите мысль"/></label>
         <label><input type="text" name="tag" placeholder="Введите тег"/></label>
+        <input type="hidden" name="_csrf" value="${_csrf.token}"/>
         <button type="submit">Записать</button>
     </form>
 </div>

@@ -29,13 +29,14 @@
         <th>Дата</th>
         <th>Текст</th>
         <th>Тег</th>
+        <th>Автор</th>
         <th>Ссылка</th>
     </tr>
     </thead>
 
     <#if records?size==0>
         <tr>
-            <td colspan="4">Записей нет...</td>
+            <td colspan="5">Записей нет...</td>
         </tr>
 
     <#else>
@@ -44,6 +45,7 @@
                 <td>${r.getDate()}</td>
                 <td>${r.getText()}</td>
                 <td>${r.getTag()}</td>
+                <td>${r.getAuthor().getUsername()}</td>
                 <td><a href="/records/${r.getId()}">Редактировать</a></td>
             </tr>
 

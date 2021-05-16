@@ -3,10 +3,12 @@ package ru.butakov.remember.controllers;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.butakov.remember.entity.Record;
+import ru.butakov.remember.entity.User;
 import ru.butakov.remember.exceptions.NotFoundException;
 import ru.butakov.remember.service.RecordsService;
 
@@ -29,8 +31,8 @@ public class RecordsController {
     }
 
     @PostMapping
-    public String addRecord(@RequestParam String text, @RequestParam String tag) {
-        Record record = new Record(text, tag);
+    public String addRecord(@AuthenticationPrincipal User user, @RequestParam String text, @RequestParam String tag) {
+        Record record = new Record(text, tag, user);
         recordsService.save(record);
         return "redirect:/records";
     }

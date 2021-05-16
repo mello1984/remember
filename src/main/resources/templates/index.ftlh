@@ -6,12 +6,14 @@
 </head>
 <body>
 
-<#assign hasName = name??>
-<#if hasName>
+<#if name??>
 Hello, ${name}!
 <#else>
 Hello, unknown!
 </#if>
+
+<br><br>
+<a href="/records">Records</a>
 
 </body>
 </html>

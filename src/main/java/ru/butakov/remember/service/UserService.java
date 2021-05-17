@@ -11,6 +11,7 @@ import ru.butakov.remember.dao.UserRepository;
 import ru.butakov.remember.entity.User;
 
 import java.text.MessageFormat;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -32,5 +33,13 @@ public class UserService implements UserDetailsService {
         Optional<User> userFromDb = userRepository.findByUsername(username);
         return userFromDb.orElseThrow(() -> new UsernameNotFoundException(
                 MessageFormat.format("User {0} not found", username)));
+    }
+
+    public List<User> findAll() {
+        return userRepository.findAll();
+    }
+
+    public Optional<User> findById(int id){
+        return userRepository.findById(id);
     }
 }

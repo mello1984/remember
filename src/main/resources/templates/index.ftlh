@@ -1,19 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<#import "parts/common.ftl" as c>
+<@c.page title="Index page">
 
-<#if name??>
-Hello, ${name}!
-<#else>
-Hello, unknown!
-</#if>
+    <#if name??>
+        Hello, ${name}!
+    <#else>
+        Hello, unknown!
+    </#if>
 
-<br><br>
-<a href="/records">Records</a>
+    <br><br>
+    <a href="/records">Records</a>
 
-</body>
-</html>
+</@c.page>

@@ -1,19 +1,9 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
-<head>
-    <title>Spring Security Example </title>
-</head>
-<body>
+<#import "parts/common.ftl" as c>
+<#import "parts/login.ftl" as l>
+<@c.page title="Add new user">
 
-<h3>Add new user</h3>
+    <h3>Add new user</h3>
 
-<form action="/registration" method="post">
-    <div><label> User Name : <input type="text" name="username"/> </label></div>
-    <div><label> Password: <input type="password" name="password"/> </label></div>
-    <input type="hidden" name="_csrf" value="${_csrf.token}"/>
-    <div><input type="submit" value="Sign In"/></div>
-</form>
-
-<#if userExistsMessage??>${userExistsMessage}</#if>
-</body>
-</html>
+    <@l.login path="/registration"/>
+    <#if userExistsMessage??>${userExistsMessage}</#if>
+</@c.page>

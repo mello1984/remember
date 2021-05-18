@@ -22,6 +22,7 @@ public class Record {
     LocalDate date;
     String text;
     String tag;
+    String filename;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")

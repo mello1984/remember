@@ -1,7 +1,6 @@
 package ru.butakov.remember.controllers;
 
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,13 +45,7 @@ public class RecordsController {
                             @RequestParam String tag,
                             @RequestParam("file") MultipartFile file) throws IOException {
         Record record = new Record(text, tag, user);
-        if (file != null) {
-            File uploadDir = new File(uploadPath);
-            if (!uploadDir.exists()) uploadDir.mkdir();
-            String newFilename = UUID.randomUUID().toString() + "." + file.getOriginalFilename();
-            record.setFilename(newFilename);
-            file.transferTo(new File(uploadPath + "/" + newFilename));
-        }
+        updateFile(record, file);
         recordsService.save(record);
         return "redirect:/records";
     }
@@ -66,15 +59,36 @@ public class RecordsController {
     }
 
     @PostMapping("/{id}/edit")
-    public String editRecord(@PathVariable("id") long id, @RequestParam String text, @RequestParam String tag) {
+    public String editRecord(@PathVariable("id") long id,
+                             @RequestParam String text,
+                             @RequestParam String tag,
+                             @RequestParam("file") MultipartFile file) throws IOException {
         Optional<Record> recordFromDb = recordsService.findById(id);
         if (recordFromDb.isEmpty()) throw new NotFoundException();
         Record record = recordFromDb.get();
         record.setDate(LocalDate.now());
         record.setText(text);
         record.setTag(tag);
+
+        updateFile(record, file);
         recordsService.save(record);
         return "redirect:/records";
+    }
+
+    private void updateFile(Record record, MultipartFile newFile) throws IOException {
+        if (newFile != null) {
+            File uploadDir = new File(uploadPath);
+            if (!uploadDir.exists()) uploadDir.mkdir();
+
+            if (record.getFilename() != null) {
+                File oldFile = new File(uploadPath + "/" + record.getFilename());
+                if (oldFile.exists()) oldFile.delete();
+            }
+
+            String newFilename = UUID.randomUUID().toString() + "." + newFile.getOriginalFilename();
+            record.setFilename(newFilename);
+            newFile.transferTo(new File(uploadPath + "/" + newFilename));
+        }
     }
 
     @PostMapping("/{id}/delete")

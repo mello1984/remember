@@ -1,20 +1,21 @@
 <#import "../parts/common.ftl" as c>
+<#include "../parts/security.ftl">
 <@c.page "users list">
-    <h3>User list</h3>
-
-    <table border="1">
+    <table class="table">
         <thead>
         <tr>
-            <th>Id</th>
-            <th>Username</th>
-            <th>Roles</th>
-            <th>Link</th>
+            <th scope="col">Id</th>
+            <th scope="col">Username</th>
+            <th scope="col">Active</th>
+            <th scope="col">Roles</th>
+            <th scope="col">Link</th>
         </tr>
         </thead>
         <#list userlist as u>
             <tr>
                 <td>${u.getId()}</td>
                 <td>${u.getUsername()}</td>
+                <td><#if u.active>active<#else>not active</#if></td>
                 <td><#list u.getRoles() as role>${role}<#sep>, </#list></td>
                 <td><a href="/users/${u.getId()}">edit</a></td>
             </tr>

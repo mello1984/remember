@@ -1,15 +1,16 @@
+<#include "parts/security.ftl">
 <#import "parts/common.ftl" as c>
 <@c.page title="Index page">
 
-    <#if name??>
-        Hello, ${name}!
-    <#else>
-        Hello, unknown!
+    <h3>Hello, ${name}!</h3>
+    <div class="mb-1">This is simple project...</div>
+    <#if !known>
+        <div class="mb-1"><a href="/login">Login page</a></div>
     </#if>
 
-    <br><br>
-    <a href="/records">Records</a>
-    <br><br>
-    <a href="/users">Users</a>
+    <div class="mt-4">
+        User: ${user}<br>
+        Name: ${name}<br>
+    </div>
 
 </@c.page>

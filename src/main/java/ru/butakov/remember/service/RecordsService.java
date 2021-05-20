@@ -1,31 +1,16 @@
 package ru.butakov.remember.service;
 
-import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Service;
-import ru.butakov.remember.dao.RecordsRepository;
 import ru.butakov.remember.entity.Record;
 
 import java.util.List;
 import java.util.Optional;
 
-@AllArgsConstructor
-@Service
-public class RecordsService {
-    RecordsRepository recordsRepository;
+public interface RecordsService {
+    Record save(Record record);
 
-    public Record save(Record record) {
-        return recordsRepository.save(record);
-    }
+    List<Record> findAll();
 
-    public List<Record> findAll(){
-        return recordsRepository.findAll();
-    }
+    Optional<Record> findById(long id);
 
-    public Optional<Record> findById(long id){
-        return recordsRepository.findById(id);
-    }
-
-    public void delete(Record record){
-        recordsRepository.delete(record);
-    }
+    void delete(Record record);
 }

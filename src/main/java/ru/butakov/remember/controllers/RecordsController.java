@@ -45,7 +45,7 @@ public class RecordsController {
                             @RequestParam String tag,
                             @RequestParam("file") MultipartFile file) throws IOException {
         Record record = new Record(text, tag, user);
-        updateFile(record, file);
+        if (file != null && !file.isEmpty()) updateFile(record, file);
         recordsService.save(record);
         return "redirect:/records";
     }
@@ -70,7 +70,7 @@ public class RecordsController {
         record.setText(text);
         record.setTag(tag);
 
-        updateFile(record, file);
+        if (file != null && !file.isEmpty()) updateFile(record, file);
         recordsService.save(record);
         return "redirect:/records";
     }

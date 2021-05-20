@@ -13,6 +13,6 @@ public class MainControllerImpl implements MainController {
     @Override
     public String hello(@RequestParam(required = false) String name, Model model) {
         model.addAttribute("name", name);
-        return "index";
+        return "main";
     }
 }

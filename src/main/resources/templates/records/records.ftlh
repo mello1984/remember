@@ -18,7 +18,7 @@
                 </div>
                 <div class="form-group">
                     <div class="custom-file">
-                        <input type="file" name="file" id="customFile">
+                        <input type="file" name="file" id="customFile"/>
                         <label class="custom-file-label" for="customFile">Choose file</label>
                     </div>
                 </div>
@@ -29,10 +29,10 @@
             </form>
         </div>
     </div>
-    <br><br>
+    <br/><br/>
 
 
-    <div class="card-columns">
+    <div class="card-columns" id="message-list">
         <#list records as r>
             <div class="card m-2">
                 <div class="m-1">

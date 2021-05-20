@@ -9,8 +9,8 @@
     </#if>
 
     <div class="mt-4">
-        User: ${user}<br>
-        Name: ${name}<br>
+        User: ${user}<br/>
+        Name: ${name}<br/>
     </div>
 
 </@c.page>

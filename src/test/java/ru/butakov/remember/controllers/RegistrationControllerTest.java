@@ -1,28 +1,23 @@
 package ru.butakov.remember.controllers;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
-import ru.butakov.remember.entity.Role;
-import ru.butakov.remember.entity.User;
 import ru.butakov.remember.service.UserService;
 
-import java.util.Collections;
-import java.util.Optional;
-import java.util.Set;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.hamcrest.Matchers.containsString;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.xpath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -33,11 +28,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class RegistrationControllerTest {
     @Autowired
     private MockMvc mockMvc;
-    @Autowired
+    @MockBean
     private UserService userService;
 
     @Test
-    public void registrationGetTest() throws Exception{
+    public void registrationGetTest() throws Exception {
         this.mockMvc.perform(get("/registration"))
                 .andDo(print())
                 .andExpect(status().is2xxSuccessful())
@@ -45,48 +40,31 @@ class RegistrationControllerTest {
     }
 
     @Test
-    public void registrationUserTest() throws Exception {
+    public void registrationNewUserTest() throws Exception {
+
+        Mockito.when(userService.addUser(Mockito.any())).thenReturn(true);
+
         this.mockMvc.perform(post("/registration")
                 .param("username", "Mike")
                 .param("password", "mike")
                 .with(csrf()))
                 .andDo(print())
-                .andExpect(status().is3xxRedirection());
-
-
-        Optional<User> userFromDb = userService.findByUsername("Mike");
-        assertTrue(userFromDb.isPresent());
-
-        User user = userFromDb.get();
-        assertAll(
-                () -> assertEquals(10, user.getId()),
-                () -> assertEquals("Mike", user.getUsername()),
-                () -> assertTrue(user.isActive()),
-                () -> assertEquals(Collections.singleton(Role.USER), user.getRoles()),
-                () -> assertTrue(user.getRecordList().isEmpty())
-        );
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/login"));
     }
 
     @Test
     public void registrationExistingUserExceptionTest() throws Exception {
+
+        Mockito.when(userService.addUser(Mockito.any())).thenReturn(false);
+
         this.mockMvc.perform(post("/registration")
                 .param("username", "admin")
                 .param("password", "123")
                 .with(csrf()))
                 .andDo(print())
-                .andExpect(status().is2xxSuccessful());
-
-        Optional<User> userFromDb = userService.findByUsername("admin");
-        assertTrue(userFromDb.isPresent());
-
-        User user = userFromDb.get();
-        assertAll(
-                () -> assertEquals(1, user.getId()),
-                () -> assertEquals("admin", user.getUsername()),
-                () -> assertTrue(user.isActive()),
-                () -> assertEquals(Set.of(Role.ADMIN, Role.USER), user.getRoles()),
-                () -> assertEquals(3, user.getRecordList().size())
-        );
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(content().string(containsString("User with this name already exists.")));
     }
 
 }

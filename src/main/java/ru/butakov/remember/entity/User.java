@@ -26,6 +26,9 @@ public class User implements UserDetails {
     String password;
     boolean active;
 
+    String email;
+    String activationCode;
+
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)

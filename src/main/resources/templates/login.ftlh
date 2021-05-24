@@ -4,5 +4,6 @@
 
     <h3>Login page</h3>
     <@l.login path="/login" isRegisterForm=false/>
+    <#if message??>${message}</#if>
 
 </@c.page>

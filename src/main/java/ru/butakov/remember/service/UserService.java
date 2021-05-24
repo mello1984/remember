@@ -15,4 +15,6 @@ public interface UserService {
     Optional<User> findById(int id);
 
     boolean addUser(User user);
+
+    boolean activateEmail(String code);
 }

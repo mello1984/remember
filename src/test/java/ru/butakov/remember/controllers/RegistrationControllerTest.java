@@ -21,7 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@TestPropertySource("/application-test.properties")
+@TestPropertySource({"/application-test.properties", "/private-test.properties"})
 @Sql(value = {"/generate-db-before.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 @Sql(value = {"/generate-db-after.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 @Transactional
@@ -65,6 +65,20 @@ class RegistrationControllerTest {
                 .andDo(print())
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(content().string(containsString("User with this name already exists.")));
+    }
+
+    @Test
+    public void activateExistingCodeTest() throws Exception{
+        Mockito.when(userService.activateEmail("123")).thenReturn(true);
+        this.mockMvc.perform(get("/activate/123"))
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(content().string(containsString("Email activated")));
+    }  @Test
+    public void activateNotExistingCodeTest() throws Exception{
+        Mockito.when(userService.activateEmail("123")).thenReturn(false);
+        this.mockMvc.perform(get("/activate/123"))
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(content().string(containsString("Activation code is not found")));
     }
 
 }

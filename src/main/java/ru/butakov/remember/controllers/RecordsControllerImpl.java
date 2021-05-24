@@ -45,7 +45,7 @@ public class RecordsControllerImpl implements RecordsController {
     public String addRecord(@AuthenticationPrincipal User user,
                             @RequestParam String text,
                             @RequestParam String tag,
-                            @RequestParam("file") MultipartFile file) throws IOException {
+                            @RequestParam(value = "file", required = false) MultipartFile file) throws IOException {
         Record record = new Record(text, tag, user);
         if (file != null && !file.isEmpty()) updateFile(record, file);
         recordsService.save(record);

@@ -1,5 +1,5 @@
 <#macro login path isRegisterForm>
-    <form action="${path}" method="post">
+    <form action="${path}" method="post" <#if isRegisterForm> id="register-form" <#else>id="login-form"</#if> >
         <div class="form-group row">
             <label class="col-sm-1 col-form-label"> Username</label>
             <div class="col-sm-6"><input class="form-control" type="text" name="username" placeholder="Username"/></div>

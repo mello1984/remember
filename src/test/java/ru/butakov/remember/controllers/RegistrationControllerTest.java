@@ -18,9 +18,11 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.xpath;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -33,6 +35,14 @@ class RegistrationControllerTest {
     private MockMvc mockMvc;
     @Autowired
     private UserService userService;
+
+    @Test
+    public void registrationGetTest() throws Exception{
+        this.mockMvc.perform(get("/registration"))
+                .andDo(print())
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(xpath("//*[@id='register-form']").exists());
+    }
 
     @Test
     public void registrationUserTest() throws Exception {

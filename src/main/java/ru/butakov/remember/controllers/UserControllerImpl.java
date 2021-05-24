@@ -37,7 +37,6 @@ public class UserControllerImpl implements UserController {
     @Override
     @GetMapping("/{user}")
     public String userEdit(@PathVariable User user, Model model) {
-        if (user == null) throw new NotFoundException();
         model.addAttribute("user", user);
         model.addAttribute("roles", List.of(Role.values()));
 //        model.addAttribute("roles", Role.values()); //???

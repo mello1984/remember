@@ -11,6 +11,11 @@
         </div>
         <#if isRegisterForm>
             <div class="form-group row">
+                <label class="col-sm-1 col-form-label"> Password confirm</label>
+                <div class="col-sm-6"><input class="form-control" type="password" name="passwordConfirm" placeholder="Password confirmation"/>
+                </div>
+            </div>
+            <div class="form-group row">
                 <label class="col-sm-1 col-form-label"> Email</label>
                 <div class="col-sm-6"><input class="form-control" type="email" name="email"
                                              placeholder="some@some.com"/>

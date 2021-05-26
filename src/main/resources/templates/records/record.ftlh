@@ -8,7 +8,9 @@
                 <input type="text" name="text" class="form-control m-1" placeholder="Text" value="${record.text}"/>
                 <input type="text" name="tag" class="form-control m-1" placeholder="Tag" value="${record.tag}"/>
 
-                <div class="m-1"><img src="/img/${record.filename}"/></div>
+                <#if record.filename??>
+                    <div class="m-1"><img src="/img/${record.filename}"/></div>
+                </#if>
 
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">

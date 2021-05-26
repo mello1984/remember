@@ -24,6 +24,8 @@ public class User implements UserDetails {
 
     String username;
     String password;
+    @Transient
+    String passwordConfirm;
     boolean active;
 
     String email;
@@ -44,7 +46,7 @@ public class User implements UserDetails {
         this.roles = roles;
     }
 
-    public boolean isAdmin(){
+    public boolean isAdmin() {
         return roles.contains(Role.ADMIN);
     }
 

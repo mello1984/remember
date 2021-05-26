@@ -27,6 +27,11 @@ public class RegistrationControllerImpl implements RegistrationController {
     @PostMapping("/registration")
     public String registration(User user, Model model) {
 
+        if (!user.getPassword().equals(user.getPasswordConfirm())) {
+            model.addAttribute("existsMessage", "Passwords not confirms");
+            return "registration";
+        }
+
         if (!userService.addUser(user)) {
             model.addAttribute("existsMessage", "User with this name already exists.");
             return "registration";

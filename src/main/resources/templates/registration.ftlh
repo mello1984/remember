@@ -4,6 +4,5 @@
 
     <h3>Add new user</h3>
     <@l.login path="/registration" isRegisterForm=true/>
-    <#if existsMessage??>${existsMessage}</#if>
 
 </@c.page>

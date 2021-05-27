@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.butakov.remember.entity.Post;
@@ -15,11 +16,14 @@ import ru.butakov.remember.entity.User;
 import ru.butakov.remember.exceptions.NotFoundException;
 import ru.butakov.remember.service.PostService;
 
+import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+
 
 @Controller
 @RequestMapping(value = "/posts")
@@ -33,27 +37,15 @@ public class PostControllerImpl implements PostController {
 
     @Override
     @GetMapping
-    public String records(Model model) {
+    public String post(Model model) {
         List<Post> posts = postService.findAll();
         model.addAttribute("posts", posts);
         return "/posts/posts";
     }
 
     @Override
-    @PostMapping
-    public String addRecord(@AuthenticationPrincipal User user,
-                            @RequestParam String text,
-                            @RequestParam String tag,
-                            @RequestParam(value = "file", required = false) MultipartFile file) throws IOException {
-        Post post = new Post(text, tag, user);
-        if (file != null && !file.isEmpty()) updateFile(post, file);
-        postService.save(post);
-        return "redirect:/posts";
-    }
-
-    @Override
     @GetMapping("/{id}")
-    public String records(@PathVariable("id") long id, Model model) {
+    public String post(@PathVariable("id") long id, Model model) {
         Optional<Post> recordFromDb = postService.findById(id);
         if (recordFromDb.isEmpty()) throw new NotFoundException();
         model.addAttribute("post", recordFromDb.get());
@@ -61,11 +53,37 @@ public class PostControllerImpl implements PostController {
     }
 
     @Override
+    @PostMapping
+    public String add(@AuthenticationPrincipal User user,
+                      @Valid Post post,
+                      BindingResult bindingResult,
+                      Model model,
+                      @RequestParam(value = "file", required = false) MultipartFile file) throws IOException {
+
+        if (bindingResult.hasErrors()) {
+            Map<String, String> errors = ControllerUtils.getErrorsMap(bindingResult);
+            model.mergeAttributes(errors);
+            model.addAttribute("post", post);
+
+            List<Post> posts = postService.findAll();
+            model.addAttribute("posts", posts);
+            return "/posts/posts";
+        }
+
+        post.setAuthor(user);
+
+        if (file != null && !file.isEmpty()) updateFile(post, file);
+        postService.save(post);
+        return "redirect:/posts";
+    }
+
+
+    @Override
     @PostMapping("/{id}/edit")
-    public String editRecord(@PathVariable("id") long id,
-                             @RequestParam String text,
-                             @RequestParam String tag,
-                             @RequestParam("file") MultipartFile file) throws IOException {
+    public String edit(@PathVariable("id") long id,
+                       @RequestParam String text,
+                       @RequestParam String tag,
+                       @RequestParam("file") MultipartFile file) throws IOException {
         Optional<Post> recordFromDb = postService.findById(id);
         if (recordFromDb.isEmpty()) throw new NotFoundException();
         Post post = recordFromDb.get();
@@ -95,7 +113,7 @@ public class PostControllerImpl implements PostController {
 
     @Override
     @PostMapping("/{id}/delete")
-    public String deleteRecord(@PathVariable("id") long id) {
+    public String delete(@PathVariable("id") long id) {
         Optional<Post> recordFromDb = postService.findById(id);
         if (recordFromDb.isEmpty()) throw new NotFoundException();
         postService.delete(recordFromDb.get());

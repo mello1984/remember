@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
 
 @Data
@@ -19,7 +21,11 @@ public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;
+    @NotBlank(message = "Text cannot be empty")
+    @Size(max = 2048, message = "Post is too long (more than 2kB)")
     String text;
+    @NotBlank(message = "Tag cannot be empty")
+    @Size(max = 64, message = "Tag is too long (more than 64 symbols)")
     String tag;
     String filename;
 

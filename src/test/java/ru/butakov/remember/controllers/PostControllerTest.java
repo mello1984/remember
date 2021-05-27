@@ -38,7 +38,7 @@ class PostControllerTest {
 
     @Test
     @WithUserDetails("admin")
-    public void recordListAdminTest() throws Exception {
+    public void postListAdminTest() throws Exception {
         this.mockMvc
                 .perform(get("/posts"))
                 .andDo(print())
@@ -49,7 +49,7 @@ class PostControllerTest {
 
     @Test
     @WithUserDetails("user")
-    public void recordListUserTest() throws Exception {
+    public void postListUserTest() throws Exception {
         this.mockMvc
                 .perform(get("/posts"))
                 .andDo(print())
@@ -60,7 +60,7 @@ class PostControllerTest {
 
     @Test
     @WithUserDetails("admin")
-    public void addRecordSuccessfulWithFileTest() throws Exception {
+    public void addPostSuccessfulWithFileTest() throws Exception {
         String text = "my-text";
         String tag = "my-tag";
 
@@ -87,7 +87,7 @@ class PostControllerTest {
 
     @Test
     @WithUserDetails("admin")
-    public void addRecordSuccessfulWithoutFileAdminTest() throws Exception {
+    public void addPostSuccessfulWithoutFileAdminTest() throws Exception {
         String text = "my-text";
         String tag = "my-tag";
 
@@ -112,7 +112,7 @@ class PostControllerTest {
 
     @Test
     @WithUserDetails("user")
-    public void addRecordSuccessfulWithoutFileUserTest() throws Exception {
+    public void addPostSuccessfulWithoutFileUserTest() throws Exception {
         String text = "my-text";
         String tag = "my-tag";
 

@@ -37,7 +37,7 @@ public class User implements UserDetails {
     Set<Role> roles;
 
     @OneToMany(mappedBy = "author")
-    List<Record> recordList = new ArrayList<>();
+    List<Post> postList = new ArrayList<>();
 
     public User(String username, String password, Set<Role> roles) {
         this.username = username;

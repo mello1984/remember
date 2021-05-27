@@ -10,34 +10,33 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ru.butakov.remember.entity.Record;
+import ru.butakov.remember.entity.Post;
 import ru.butakov.remember.entity.User;
 import ru.butakov.remember.exceptions.NotFoundException;
-import ru.butakov.remember.service.RecordsService;
+import ru.butakov.remember.service.PostService;
 
 import java.io.File;
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 @Controller
-@RequestMapping(value = "/records")
+@RequestMapping(value = "/posts")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @NoArgsConstructor
-public class RecordsControllerImpl implements RecordsController {
+public class PostControllerImpl implements PostController {
     @Autowired
-    RecordsService recordsService;
+    PostService postService;
     @Value("${upload.path}")
     String uploadPath;
 
     @Override
     @GetMapping
     public String records(Model model) {
-        List<Record> records = recordsService.findAll();
-        model.addAttribute("records", records);
-        return "/records/records";
+        List<Post> posts = postService.findAll();
+        model.addAttribute("posts", posts);
+        return "/posts/posts";
     }
 
     @Override
@@ -46,19 +45,19 @@ public class RecordsControllerImpl implements RecordsController {
                             @RequestParam String text,
                             @RequestParam String tag,
                             @RequestParam(value = "file", required = false) MultipartFile file) throws IOException {
-        Record record = new Record(text, tag, user);
-        if (file != null && !file.isEmpty()) updateFile(record, file);
-        recordsService.save(record);
-        return "redirect:/records";
+        Post post = new Post(text, tag, user);
+        if (file != null && !file.isEmpty()) updateFile(post, file);
+        postService.save(post);
+        return "redirect:/posts";
     }
 
     @Override
     @GetMapping("/{id}")
     public String records(@PathVariable("id") long id, Model model) {
-        Optional<Record> recordFromDb = recordsService.findById(id);
+        Optional<Post> recordFromDb = postService.findById(id);
         if (recordFromDb.isEmpty()) throw new NotFoundException();
-        model.addAttribute("record", recordFromDb.get());
-        return "/records/record";
+        model.addAttribute("post", recordFromDb.get());
+        return "/posts/post";
     }
 
     @Override
@@ -67,30 +66,29 @@ public class RecordsControllerImpl implements RecordsController {
                              @RequestParam String text,
                              @RequestParam String tag,
                              @RequestParam("file") MultipartFile file) throws IOException {
-        Optional<Record> recordFromDb = recordsService.findById(id);
+        Optional<Post> recordFromDb = postService.findById(id);
         if (recordFromDb.isEmpty()) throw new NotFoundException();
-        Record record = recordFromDb.get();
-        record.setDate(LocalDate.now());
-        record.setText(text);
-        record.setTag(tag);
+        Post post = recordFromDb.get();
+        post.setText(text);
+        post.setTag(tag);
 
-        if (file != null && !file.isEmpty()) updateFile(record, file);
-        recordsService.save(record);
-        return "redirect:/records";
+        if (file != null && !file.isEmpty()) updateFile(post, file);
+        postService.save(post);
+        return "redirect:/posts";
     }
 
-    private void updateFile(Record record, MultipartFile newFile) throws IOException {
+    private void updateFile(Post post, MultipartFile newFile) throws IOException {
         if (newFile != null) {
             File uploadDir = new File(uploadPath);
             if (!uploadDir.exists()) uploadDir.mkdir();
 
-            if (record.getFilename() != null) {
-                File oldFile = new File(uploadPath + "/" + record.getFilename());
+            if (post.getFilename() != null) {
+                File oldFile = new File(uploadPath + "/" + post.getFilename());
                 if (oldFile.exists()) oldFile.delete();
             }
 
             String newFilename = UUID.randomUUID().toString() + "." + newFile.getOriginalFilename();
-            record.setFilename(newFilename);
+            post.setFilename(newFilename);
             newFile.transferTo(new File(uploadPath + "/" + newFilename));
         }
     }
@@ -98,10 +96,10 @@ public class RecordsControllerImpl implements RecordsController {
     @Override
     @PostMapping("/{id}/delete")
     public String deleteRecord(@PathVariable("id") long id) {
-        Optional<Record> recordFromDb = recordsService.findById(id);
+        Optional<Post> recordFromDb = postService.findById(id);
         if (recordFromDb.isEmpty()) throw new NotFoundException();
-        recordsService.delete(recordFromDb.get());
-        return "redirect:/records";
+        postService.delete(recordFromDb.get());
+        return "redirect:/posts";
     }
 
 }

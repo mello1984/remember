@@ -11,8 +11,8 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Transactional;
-import ru.butakov.remember.dao.RecordsRepository;
-import ru.butakov.remember.entity.Record;
+import ru.butakov.remember.dao.PostRepository;
+import ru.butakov.remember.entity.Post;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
@@ -30,17 +30,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Sql(value = {"/generate-db-before.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 @Sql(value = {"/generate-db-after.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 @Transactional
-class RecordsControllerTest {
+class PostControllerTest {
     @Autowired
     private MockMvc mockMvc;
     @Autowired
-    private RecordsRepository recordsRepository;
+    private PostRepository postRepository;
 
     @Test
     @WithUserDetails("admin")
     public void recordListAdminTest() throws Exception {
         this.mockMvc
-                .perform(get("/records"))
+                .perform(get("/posts"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(authenticated())
@@ -51,7 +51,7 @@ class RecordsControllerTest {
     @WithUserDetails("user")
     public void recordListUserTest() throws Exception {
         this.mockMvc
-                .perform(get("/records"))
+                .perform(get("/posts"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(authenticated())
@@ -66,17 +66,17 @@ class RecordsControllerTest {
 
         MockMultipartFile mockMultipartFile = new MockMultipartFile("name", "content".getBytes(StandardCharsets.UTF_8));
         mockMvc.perform(
-                MockMvcRequestBuilders.multipart("/records")
+                MockMvcRequestBuilders.multipart("/posts")
                         .file("file", mockMultipartFile.getBytes())
                         .param("text", text)
                         .param("tag", tag)
                         .with(csrf()))
                 .andDo(print())
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/records"))
+                .andExpect(redirectedUrl("/posts"))
                 .andExpect(authenticated());
 
-        Optional<Record> actual = recordsRepository.findAll().stream()
+        Optional<Post> actual = postRepository.findAll().stream()
                 .filter(r -> r.getText().equals("my-text")).findFirst();
 
         assertTrue(actual.isPresent());
@@ -92,16 +92,16 @@ class RecordsControllerTest {
         String tag = "my-tag";
 
         mockMvc.perform(
-                MockMvcRequestBuilders.multipart("/records")
+                MockMvcRequestBuilders.multipart("/posts")
                         .param("text", text)
                         .param("tag", tag)
                         .with(csrf()))
                 .andDo(print())
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/records"))
+                .andExpect(redirectedUrl("/posts"))
                 .andExpect(authenticated());
 
-        Optional<Record> actual = recordsRepository.findAll().stream()
+        Optional<Post> actual = postRepository.findAll().stream()
                 .filter(r -> r.getText().equals("my-text")).findFirst();
 
         assertTrue(actual.isPresent());
@@ -117,16 +117,16 @@ class RecordsControllerTest {
         String tag = "my-tag";
 
         mockMvc.perform(
-                MockMvcRequestBuilders.multipart("/records")
+                MockMvcRequestBuilders.multipart("/posts")
                         .param("text", text)
                         .param("tag", tag)
                         .with(csrf()))
                 .andDo(print())
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/records"))
+                .andExpect(redirectedUrl("/posts"))
                 .andExpect(authenticated());
 
-        Optional<Record> actual = recordsRepository.findAll().stream()
+        Optional<Post> actual = postRepository.findAll().stream()
                 .filter(r -> r.getText().equals("my-text")).findFirst();
 
         assertTrue(actual.isPresent());

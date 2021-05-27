@@ -14,12 +14,11 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "records")
-public class Record {
+@Table(name = "posts")
+public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;
-    LocalDate date;
     String text;
     String tag;
     String filename;
@@ -29,10 +28,9 @@ public class Record {
     User author;
 
 
-    public Record(String text, String tag, User user) {
+    public Post(String text, String tag, User user) {
         this.text = text;
         this.tag = tag;
         this.author = user;
-        date = LocalDate.now();
     }
 }

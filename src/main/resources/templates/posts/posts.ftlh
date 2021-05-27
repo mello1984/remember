@@ -1,10 +1,10 @@
 <#import "../parts/common.ftl" as c>
-<@c.page title="Records page">
+<@c.page title="Posts page">
     <div class="mb-4"><h3>Список записей</h3></div>
 
     <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false"
        aria-controls="collapseExample">
-        Add new Message
+        Add new Post
     </a>
 
     <div class="collapse" id="collapseExample">
@@ -24,7 +24,7 @@
                 </div>
                 <input type="hidden" name="_csrf" value="${_csrf.token}"/>
                 <div class="form-group">
-                    <button type="submit" class="btn btn-primary">Add new record</button>
+                    <button type="submit" class="btn btn-primary">Add new post</button>
                 </div>
             </form>
         </div>
@@ -33,7 +33,7 @@
 
 
     <div class="card-columns" id="message-list">
-        <#list records as r>
+        <#list posts as r>
             <div class="card m-2">
                 <div class="m-1">
                     <#if r.filename??>
@@ -48,11 +48,11 @@
                 </div>
                 <div class="card-footer text-muted">
                     ${r.author.username}
-                    <a href="/records/${r.id}">Go somewhere</a>
+                    <a href="/posts/${r.id}">Go somewhere</a>
                 </div>
             </div>
         <#else>
-            No message
+            Posts not found
         </#list>
     </div>
 

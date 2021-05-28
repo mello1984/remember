@@ -1,5 +1,6 @@
 package ru.butakov.remember.controllers;
 
+import org.hamcrest.Matcher;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -43,7 +44,7 @@ class MainControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(authenticated())
-                .andExpect(xpath("/html/body/nav/div/div[1]").string("admin"))
+                .andExpect(xpath("/html/body/nav/div/div[1]").string(containsString("admin")))
         ;
     }
 

@@ -37,7 +37,7 @@ public class SecurityTest {
                 .perform(get("/login"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string(containsString("unknown")));
+                .andExpect(content().string(containsString("Login page")));
     }
 
     @Test

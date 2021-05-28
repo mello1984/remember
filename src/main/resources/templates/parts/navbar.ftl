@@ -27,9 +27,8 @@
             </#if>
         </ul>
         <div class="navbar-text mr-4">
-            <#if known> ${name}
-            <#else>
-                <a href="/login" class="btn btn-outline-secondary" role="button" aria-pressed="true">Log in</a>
+            <#if known>${name}
+            <#else><a href="/login" class="btn btn-outline-secondary" role="button" aria-pressed="true">Log in</a>
             </#if>
         </div>
         <#if known>

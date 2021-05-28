@@ -12,11 +12,12 @@ public interface PostController {
     String post(Model model);
 
     String add(User user, Post post, BindingResult bindingResult,Model model, MultipartFile file) throws IOException;
-//    String add(User user, String text, String tag, MultipartFile file) throws IOException;
 
     String post(long id, Model model);
 
     String edit(long id, String text, String tag, MultipartFile file) throws IOException;
 
     String delete(long id);
+
+    String userPosts(User user, Model model);
 }

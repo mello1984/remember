@@ -8,10 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "users")
@@ -19,9 +16,11 @@ import java.util.Set;
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @NoArgsConstructor
+@EqualsAndHashCode(doNotUseGetters = true, onlyExplicitlyIncluded = true)
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
     int id;
 
     @NotBlank(message = "Username cannot be empty")
@@ -42,8 +41,8 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     Set<Role> roles;
 
-    @OneToMany(mappedBy = "author")
-    List<Post> postList = new ArrayList<>();
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    Set<Post> posts = new HashSet<>();
 
     public User(String username, String password, Set<Role> roles) {
         this.username = username;

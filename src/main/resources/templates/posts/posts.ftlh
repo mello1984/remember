@@ -1,3 +1,4 @@
+<#include "../parts/security.ftl">
 <#import "../parts/common.ftl" as c>
 <@c.page title="Posts page">
     <div class="mb-4"><h3>Список записей</h3></div>
@@ -51,22 +52,22 @@
 
 
     <div class="card-columns" id="message-list">
-        <#list posts as r>
+        <#list posts as p>
             <div class="card m-2">
                 <div class="m-1">
-                    <#if r.filename??>
-                        <img src="/img/${r.filename}" class="card-img-top">
+                    <#if p.filename??>
+                        <img src="/img/${p.filename}" class="card-img-top">
                     </#if>
 
                     <div class="card-body">
-                        <span>${r.text}</span>
-                        <i>${r.tag}</i>
+                        <span>${p.text}</span><br/>
+                        <i>#${p.tag}</i>
                     </div>
 
                 </div>
                 <div class="card-footer text-muted">
-                    ${r.author.username}
-                    <a href="/posts/${r.id}">Go somewhere</a>
+                    ${p.author.username}
+                    <#if p.author.id==userId> <a href="/posts/${p.id}">Edit</a> </#if>
                 </div>
             </div>
         <#else>

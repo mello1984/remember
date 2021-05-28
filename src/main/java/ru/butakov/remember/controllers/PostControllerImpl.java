@@ -13,16 +13,15 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.butakov.remember.entity.Post;
 import ru.butakov.remember.entity.User;
+import ru.butakov.remember.exceptions.NoSuchUserException;
 import ru.butakov.remember.exceptions.NotFoundException;
 import ru.butakov.remember.service.PostService;
+import ru.butakov.remember.service.UserService;
 
 import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 
 @Controller
@@ -34,6 +33,8 @@ public class PostControllerImpl implements PostController {
     PostService postService;
     @Value("${upload.path}")
     String uploadPath;
+    @Autowired
+    UserService userService;
 
     @Override
     @GetMapping
@@ -118,6 +119,14 @@ public class PostControllerImpl implements PostController {
         if (recordFromDb.isEmpty()) throw new NotFoundException();
         postService.delete(recordFromDb.get());
         return "redirect:/posts";
+    }
+
+    @Override
+    @GetMapping("/user-posts")
+    public String userPosts(@AuthenticationPrincipal User user, Model model) {
+        User userFromDb = userService.findById(user.getId()).orElseThrow(NoSuchUserException::new);
+        model.addAttribute("posts", userFromDb.getPosts());
+        return "/posts/user-posts";
     }
 
 }

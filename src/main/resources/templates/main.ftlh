@@ -4,9 +4,6 @@
 
     <h3>Hello, ${name}!</h3>
     <div class="mb-1">This is simple project...</div>
-    <#if !known>
-        <div class="mb-1"><a href="/login">Login page</a></div>
-    </#if>
 
     <div class="mt-4">
         User: ${user}<br/>

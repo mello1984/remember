@@ -9,7 +9,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.butakov.remember.entity.Role;
 import ru.butakov.remember.entity.User;
-import ru.butakov.remember.exceptions.NotFoundException;
 import ru.butakov.remember.service.UserService;
 
 import java.util.Arrays;
@@ -28,9 +27,8 @@ public class UserControllerImpl implements UserController {
 
     @Override
     @GetMapping
-    public String userList(Model model) {
-        List<User> userList = userService.findAll();
-        model.addAttribute("userlist", userList);
+    public String getUsers(Model model) {
+        model.addAttribute("users", userService.findAll());
         return "/users/user_list";
     }
 

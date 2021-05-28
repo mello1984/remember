@@ -2,7 +2,6 @@
 <#import "parts/login.ftl" as l>
 <@c.page title="Login page">
 
-    <h3>Login page</h3>
     <@l.login path="/login" isRegisterForm=false/>
     <#if message??>${message}</#if>
 

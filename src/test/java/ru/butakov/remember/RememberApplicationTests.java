@@ -7,13 +7,13 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.TestPropertySource;
 import ru.butakov.remember.config.MailConfig;
 import ru.butakov.remember.controllers.MainController;
-import ru.butakov.remember.controllers.RecordsController;
+import ru.butakov.remember.controllers.PostController;
 import ru.butakov.remember.controllers.RegistrationController;
 import ru.butakov.remember.controllers.UserController;
-import ru.butakov.remember.dao.RecordsRepository;
+import ru.butakov.remember.dao.PostRepository;
 import ru.butakov.remember.dao.UserRepository;
 import ru.butakov.remember.service.MailSender;
-import ru.butakov.remember.service.RecordsService;
+import ru.butakov.remember.service.PostService;
 import ru.butakov.remember.service.UserService;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -24,17 +24,17 @@ class RememberApplicationTests {
     @Autowired
     MainController mainController;
     @Autowired
-    RecordsController recordsController;
+    PostController postController;
     @Autowired
     RegistrationController registrationController;
     @Autowired
     UserController userController;
     @Autowired
-	RecordsRepository recordsRepository;
+    PostRepository postRepository;
     @Autowired
 	UserRepository userRepository;
     @Autowired
-    RecordsService recordsService;
+    PostService postService;
     @Autowired
     UserService userService;
     @MockBean
@@ -46,12 +46,12 @@ class RememberApplicationTests {
     @Test
     void contextLoads() {
         assertThat(mainController).isNotNull();
-        assertThat(recordsController).isNotNull();
+        assertThat(postController).isNotNull();
         assertThat(registrationController).isNotNull();
         assertThat(userController).isNotNull();
-        assertThat(recordsRepository).isNotNull();
+        assertThat(postRepository).isNotNull();
         assertThat(userRepository).isNotNull();
-        assertThat(recordsService).isNotNull();
+        assertThat(postService).isNotNull();
         assertThat(userService).isNotNull();
     }
 

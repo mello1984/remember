@@ -11,7 +11,7 @@ import java.util.Map;
 
 public interface UserController {
     @GetMapping
-    String userList(Model model);
+    String getUsers(Model model);
 
     @GetMapping("/{user}")
     String userEdit(@PathVariable User user, Model model);

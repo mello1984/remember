@@ -1,1 +1,1 @@
-truncate records, user_role, users restart identity;
+truncate posts, user_role, users restart identity;

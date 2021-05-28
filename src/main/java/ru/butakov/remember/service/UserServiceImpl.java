@@ -1,8 +1,8 @@
 package ru.butakov.remember.service;
 
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -17,13 +17,11 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-@FieldDefaults(level = AccessLevel.PRIVATE)
+@AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class UserServiceImpl implements UserService {
-    @Autowired
     UserRepository userRepository;
-    @Autowired
     PasswordEncoder passwordEncoder;
-    @Autowired
     MailSender mailSender;
 
     @Override
@@ -48,10 +46,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean addUser(User user) {
-//        System.out.println("***************************");
-//        System.out.println(userRepository.findAll());
-//        List<User> users = userRepository.findAll();
-//        System.out.println("***************************");
         Optional<User> userFromDb = userRepository.findByUsername(user.getUsername());
 
         if (userFromDb.isPresent()) {

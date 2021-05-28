@@ -11,7 +11,7 @@
             <th scope="col">Link</th>
         </tr>
         </thead>
-        <#list userlist as u>
+        <#list users as u>
             <tr>
                 <td>${u.getId()}</td>
                 <td>${u.getUsername()}</td>

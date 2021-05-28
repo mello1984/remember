@@ -9,15 +9,15 @@ import ru.butakov.remember.entity.User;
 import java.io.IOException;
 
 public interface PostController {
-    String post(Model model);
+    String getPosts(Model model);
 
-    String add(User user, Post post, BindingResult bindingResult,Model model, MultipartFile file) throws IOException;
+    String addPost(User user, Post post, BindingResult bindingResult, Model model, MultipartFile file) throws IOException;
 
-    String post(long id, Model model);
+    String getPost(long id, Model model);
 
-    String edit(long id, String text, String tag, MultipartFile file) throws IOException;
+    String editPost(User user, Post post, BindingResult bindingResult, long id, Model model, MultipartFile file) throws IOException;
 
-    String delete(long id);
+    String deletePost(User user, long id);
 
-    String userPosts(User user, Model model);
+    String getUserPosts(User user, Model model);
 }

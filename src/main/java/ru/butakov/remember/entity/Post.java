@@ -39,4 +39,15 @@ public class Post {
         this.tag = tag;
         this.author = user;
     }
+
+    @Override
+    public String toString() {
+        return "Post{" +
+                "id=" + id +
+                ", text='" + text + '\'' +
+                ", tag='" + tag + '\'' +
+                ", filename='" + filename + '\'' +
+                ", author=" + author +
+                '}';
+    }
 }

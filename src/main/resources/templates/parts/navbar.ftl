@@ -17,7 +17,7 @@
                     <a class="nav-link" href="/posts">Posts</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/posts/user-posts">My posts</a>
+                    <a class="nav-link" href="/user-posts/${userId}">My posts</a>
                 </li>
                 <#if isAdmin>
                     <li class="nav-item">

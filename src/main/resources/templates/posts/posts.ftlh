@@ -1,5 +1,6 @@
 <#include "../parts/security.ftl">
 <#import "../parts/common.ftl" as c>
+<#import "../parts/posts.ftl" as p>
 <@c.page title="Posts page">
     <div class="mb-4"><h3>Список записей</h3></div>
 
@@ -11,7 +12,6 @@
     <div class="collapse <#if textError?? || tagError??>show</#if>" id="collapseExample">
         <div class="form-group mt-3">
             <form method="post" enctype="multipart/form-data">
-
                 <div class="form-group">
                     <input type="text" name="text" placeholder="Text"
                            class="form-control ${(textError??)?string('is-invalid','')}"
@@ -52,27 +52,7 @@
 
 
     <div class="card-columns" id="message-list">
-        <#list posts as p>
-            <div class="card m-2">
-                <div class="m-1">
-                    <#if p.filename??>
-                        <img src="/img/${p.filename}" class="card-img-top">
-                    </#if>
-
-                    <div class="card-body">
-                        <span>${p.text}</span><br/>
-                        <i>#${p.tag}</i>
-                    </div>
-
-                </div>
-                <div class="card-footer text-muted">
-                    ${p.author.username}
-                    <#if p.author.id==userId> <a href="/posts/${p.id}">Edit</a> </#if>
-                </div>
-            </div>
-        <#else>
-            Posts not found
-        </#list>
+        <@p.posts posts true/>
     </div>
 
 </@c.page>

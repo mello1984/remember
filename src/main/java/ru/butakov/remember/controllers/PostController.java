@@ -19,5 +19,5 @@ public interface PostController {
 
     String deletePost(User user, long id);
 
-    String getUserPosts(User user, Model model);
+    String getUserPosts(int user, Model model);
 }

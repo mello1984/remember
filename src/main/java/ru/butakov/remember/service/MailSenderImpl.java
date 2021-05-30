@@ -22,7 +22,6 @@ public class MailSenderImpl implements MailSender {
     String from;
 
     @Override
-    @Async
     public void send(String mailTo, String subject, String text) {
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setFrom(from);

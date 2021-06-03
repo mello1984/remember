@@ -13,4 +13,8 @@ public interface PostService {
     Optional<Post> findById(long id);
 
     void delete(Post post);
+
+    List<Post> findByTag(String tag);
+
+    List<String> findUniqueTags();
 }

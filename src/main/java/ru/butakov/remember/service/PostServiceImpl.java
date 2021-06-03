@@ -19,17 +19,27 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<Post> findAll(){
+    public List<Post> findAll() {
         return postRepository.findAll();
     }
 
     @Override
-    public Optional<Post> findById(long id){
+    public Optional<Post> findById(long id) {
         return postRepository.findById(id);
     }
 
     @Override
-    public void delete(Post post){
+    public void delete(Post post) {
         postRepository.delete(post);
+    }
+
+    @Override
+    public List<Post> findByTag(String tag) {
+        return postRepository.findByTag(tag);
+    }
+
+    @Override
+    public  List<String> findUniqueTags(){
+        return postRepository.findUniqueTags();
     }
 }

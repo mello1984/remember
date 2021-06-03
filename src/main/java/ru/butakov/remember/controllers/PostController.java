@@ -9,7 +9,7 @@ import ru.butakov.remember.entity.User;
 import java.io.IOException;
 
 public interface PostController {
-    String index(Model model);
+//    String index(Model model);
 
     String edit(User user, long id, Model model);
 
@@ -20,4 +20,6 @@ public interface PostController {
     String deletePost(User user, long id);
 
     String userPosts(int user, Model model);
+
+    String filterByTag(String tag, Model model);
 }

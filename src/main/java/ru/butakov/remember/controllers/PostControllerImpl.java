@@ -22,8 +22,11 @@ import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
 import java.text.MessageFormat;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Controller
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -36,10 +39,31 @@ public class PostControllerImpl implements PostController {
     @Value("${upload.path}")
     String uploadPath;
 
+//    @Override
+//    @GetMapping("/posts")
+//    public String index(Model model) {
+//        model.addAttribute("tag", "");
+//        model.addAttribute("posts", postService.findAll());
+//        return "/posts/index";
+//    }
+
     @Override
     @GetMapping("/posts")
-    public String index(Model model) {
-        model.addAttribute("posts", postService.findAll());
+    public String filterByTag(@RequestParam(value = "tag", required = false) String tag,
+                              Model model) {
+
+        model.addAttribute("tag", tag == null ? "" : tag);
+
+        List<Post> posts = tag == null || tag.isEmpty() ? postService.findAll() : postService.findByTag(tag);
+
+        model.addAttribute("posts", posts);
+
+        List<String> tags = postService.findUniqueTags();
+        Collections.shuffle(tags);
+        tags = tags.stream().limit(20).collect(Collectors.toList());
+
+        model.addAttribute("tags", tags);
+
         return "/posts/index";
     }
 
@@ -72,6 +96,8 @@ public class PostControllerImpl implements PostController {
             model.mergeAttributes(errors);
             model.addAttribute("post", post);
             model.addAttribute("posts", postService.findAll());
+            model.addAttribute("tag", "");
+            model.addAttribute("tags", Collections.emptyList());
             return "/posts/index";
         }
 

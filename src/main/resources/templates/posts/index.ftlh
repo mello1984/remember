@@ -57,7 +57,7 @@
                     <label for="tag" class="col-form-label">Tag</label>
                 </div>
                 <div class="col-sm-6">
-                    <input type="text" name="tag" class="form-control" id="tag" placeholder="${tag}">
+                    <input type="text" name="tag" class="form-control" id="tag" placeholder="${tag}"/>
                 </div>
                 <div class="col-sm-1">
                     <button type="submit" class="btn btn-primary">Find</button>
@@ -74,8 +74,8 @@
             <div class="col-sm-6" id="tags">
                 <a class="btn btn btn-outline-secondary" href="/posts">Clear</a>
                 <#list tags as t>
-                    <a class="btn <#if t!=tag>btn-outline-secondary<#else>btn-secondary</#if>" href="/posts?tag=${t}"
-                       role="button">${t}</a>
+                    <a class="btn <#if t!=tag>btn-outline-secondary<#else>btn-secondary</#if>" href="/posts?tag=${t.tag}"
+                       role="button">${t.tag}</a>
                 </#list>
             </div>
         </div>

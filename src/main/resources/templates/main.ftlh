@@ -8,6 +8,7 @@
     <div class="mt-4">
         User: ${user}<br/>
         Name: ${name}<br/>
+        isAdmin: ${(isAdmin)?string('User is admin', 'User is not admin')}
     </div>
 
 </@c.page>

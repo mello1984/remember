@@ -32,14 +32,4 @@ public class PostServiceImpl implements PostService {
     public void delete(Post post) {
         postRepository.delete(post);
     }
-
-    @Override
-    public List<Post> findByTag(String tag) {
-        return postRepository.findByTag(tag);
-    }
-
-    @Override
-    public  List<String> findUniqueTags(){
-        return postRepository.findUniqueTags();
-    }
 }

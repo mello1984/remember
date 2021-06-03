@@ -7,7 +7,7 @@
                 <input type="hidden" name="id" value="${post.getId()}">
                 <label class="m-1">${post.author.username}</label>
                 <input type="text" name="text" class="form-control m-1" placeholder="Text" value="${post.text}"/>
-                <input type="text" name="tag" class="form-control m-1" placeholder="Tag" value="${post.tag}"/>
+                <input type="text" name="tag" class="form-control m-1" placeholder="Tag" value="${tags}"/>
 
                 <#if post.filename??>
                     <div class="m-1"><img src="/img/${post.filename}" alt=""/></div>

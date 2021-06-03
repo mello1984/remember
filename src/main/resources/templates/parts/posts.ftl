@@ -6,10 +6,13 @@
                 <img src="/img/${p.filename}" class="card-img-top">
             </#if>
             <span>${p.text}</span><br/>
-            <i>#${p.tag}</i>
+            <#list p.tags as t>
+                <a class="btn btn-outline-secondary" href="/posts?tag=${t.tag}"
+                   role="button">${t.tag}</a>
+            </#list>
         </div>
         <div class="card-footer text-muted">
-            <#if showAuthor><a href="/posts/user-posts/${p.author.id}">${p.author.username}</a></#if>
+            <#if showAuthor><a href="/user-posts/${p.author.id}">${p.author.username}</a></#if>
             <#if p.author.id==userId> <a href="/posts/${p.id}">Edit</a> </#if>
         </div>
     </div>

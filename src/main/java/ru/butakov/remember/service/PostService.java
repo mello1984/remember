@@ -14,7 +14,7 @@ public interface PostService {
 
     void delete(Post post);
 
-    List<Post> findByTag(String tag);
+//    List<Post> findByTag(String tag);
 
-    List<String> findUniqueTags();
+//    List<String> findUniqueTags();
 }

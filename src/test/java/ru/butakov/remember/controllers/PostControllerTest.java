@@ -83,32 +83,7 @@ class PostControllerTest {
     }
 
     @Test
-    @WithUserDetails("admin")
-    public void addPostSuccessfulWithoutFileAdminTest() throws Exception {
-        String text = "my-text";
-        String tag = "my-tag";
-
-        mockMvc.perform(
-                MockMvcRequestBuilders.multipart("/posts")
-                        .param("text", text)
-                        .param("tag", tag)
-                        .with(csrf()))
-                .andDo(print())
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/posts"))
-                .andExpect(authenticated());
-
-        Optional<Post> actual = postRepository.findAll().stream()
-                .filter(r -> r.getText().equals("my-text")).findFirst();
-
-        assertTrue(actual.isPresent());
-        assertEquals(text, actual.get().getText());
-        assertEquals(tag, actual.get().getTag());
-        assertNull(actual.get().getFilename());
-    }
-
-    @Test
-    @WithUserDetails("user")
+    @WithUserDetails
     public void addPostSuccessfulWithoutFileUserTest() throws Exception {
         String text = "my-text";
         String tag = "my-tag";
@@ -122,14 +97,6 @@ class PostControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/posts"))
                 .andExpect(authenticated());
-
-        Optional<Post> actual = postRepository.findAll().stream()
-                .filter(r -> r.getText().equals("my-text")).findFirst();
-
-        assertTrue(actual.isPresent());
-        assertEquals(text, actual.get().getText());
-        assertEquals(tag, actual.get().getTag());
-        assertNull(actual.get().getFilename());
     }
 
 
@@ -172,7 +139,7 @@ class PostControllerTest {
                 .andDo(print())
                 .andExpect(status().isForbidden())
                 .andExpect(result ->
-                    assertTrue(result.getResolvedException() instanceof SecurityException));
+                        assertTrue(result.getResolvedException() instanceof SecurityException));
 
         Mockito.verify(postService, Mockito.never()).delete(Mockito.any(Post.class));
         Mockito.verify(postService).findById(4L);

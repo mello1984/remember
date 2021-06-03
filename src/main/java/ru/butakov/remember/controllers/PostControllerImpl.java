@@ -12,20 +12,19 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.butakov.remember.entity.Post;
+import ru.butakov.remember.entity.Tag;
 import ru.butakov.remember.entity.User;
 import ru.butakov.remember.exceptions.NotFoundException;
 import ru.butakov.remember.exceptions.SecurityException;
 import ru.butakov.remember.service.PostService;
+import ru.butakov.remember.service.TagService;
 import ru.butakov.remember.service.UserService;
 
 import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
 import java.text.MessageFormat;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Controller
@@ -36,6 +35,8 @@ public class PostControllerImpl implements PostController {
     PostService postService;
     @Autowired
     UserService userService;
+    @Autowired
+    TagService tagService;
     @Value("${upload.path}")
     String uploadPath;
 
@@ -54,14 +55,12 @@ public class PostControllerImpl implements PostController {
 
         model.addAttribute("tag", tag == null ? "" : tag);
 
-        List<Post> posts = tag == null || tag.isEmpty() ? postService.findAll() : postService.findByTag(tag);
-
+        List<Post> posts = tag == null || tag.isEmpty() ?
+                postService.findAll() :
+                tagService.findByTagOrCreateNew(tag).getPosts();
         model.addAttribute("posts", posts);
 
-        List<String> tags = postService.findUniqueTags();
-        Collections.shuffle(tags);
-        tags = tags.stream().limit(20).collect(Collectors.toList());
-
+        List<Tag> tags = tagService.findAll();
         model.addAttribute("tags", tags);
 
         return "/posts/index";
@@ -71,7 +70,10 @@ public class PostControllerImpl implements PostController {
     @GetMapping("/posts/{id}")
     public String edit(@AuthenticationPrincipal User user, @PathVariable("id") long id, Model model) {
         Post postFromDb = getPostFromRepoAndCheckAuthor(user, id);
+        String tags = postFromDb.getTags().stream().map(Tag::getTag).collect(Collectors.joining(";"));
+
         model.addAttribute("post", postFromDb);
+        model.addAttribute("tags", tags);
         return "/posts/edit";
     }
 
@@ -101,6 +103,8 @@ public class PostControllerImpl implements PostController {
             return "/posts/index";
         }
 
+        Set<Tag> tags = getTagSetFromTagString(post);
+        post.getTags().addAll(tags);
         post.setAuthor(user);
         if (file != null && !file.isEmpty()) updateFile(post, file);
         postService.save(post);
@@ -121,12 +125,22 @@ public class PostControllerImpl implements PostController {
         }
 
         Post postFromDb = getPostFromRepoAndCheckAuthor(user, id);
-
         postFromDb.setText(post.getText());
-        postFromDb.setTag(post.getTag());
+
+        Set<Tag> tags = getTagSetFromTagString(post);
+        postFromDb.getTags().clear();
+        postFromDb.getTags().addAll(tags);
+
         if (file != null && !file.isEmpty()) updateFile(postFromDb, file);
         postService.save(postFromDb);
         return "redirect:/posts";
+    }
+
+    private Set<Tag> getTagSetFromTagString(@Valid Post post) {
+        return Arrays.stream(post.getTag().toLowerCase().split(";"))
+                .map(String::strip)
+                .map(tagService::findByTagOrCreateNew)
+                .collect(Collectors.toSet());
     }
 
     @Override

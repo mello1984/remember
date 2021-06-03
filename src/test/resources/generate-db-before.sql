@@ -1,4 +1,4 @@
-truncate posts, user_role, users;
+truncate posts, tags, post_tag, user_role, users;
 
 ALTER SEQUENCE users_id_seq RESTART WITH 10;
 ALTER SEQUENCE posts_id_seq RESTART WITH 20;
@@ -13,8 +13,8 @@ values (1, 'ADMIN'),
        (1, 'USER'),
        (2, 'USER');
 
-insert into posts(id, tag, text, user_id, filename)
-values (1, 'my-tag-1', 'my-text-1', 1, NULL),
-       (2, 'my-tag-2', 'my-text-2', 1, NULL),
-       (3, 'my-tag-1', 'my-text-3', 1, NULL),
-       (4, 'my-tag-3', 'my-text-4', 2, NULL);
+insert into posts(id, text, user_id, filename)
+values (1, 'my-text-1', 1, NULL),
+       (2, 'my-text-2', 1, NULL),
+       (3, 'my-text-3', 1, NULL),
+       (4, 'my-text-4', 2, NULL);

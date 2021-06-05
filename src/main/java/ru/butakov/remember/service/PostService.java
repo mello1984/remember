@@ -1,6 +1,8 @@
 package ru.butakov.remember.service;
 
 import ru.butakov.remember.entity.Post;
+import ru.butakov.remember.entity.User;
+import ru.butakov.remember.entity.dto.PostDto;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,7 +16,11 @@ public interface PostService {
 
     void delete(Post post);
 
-//    List<Post> findByTag(String tag);
+    List<PostDto> postDtoList(String tag, User currentUser);
 
-//    List<String> findUniqueTags();
+    Post getPostOrThrowException(long id);
+
+    Post getPostAndCheckAuthor(User authenticatedUser, long id);
+
+    void toggleLike(long postId, User user);
 }

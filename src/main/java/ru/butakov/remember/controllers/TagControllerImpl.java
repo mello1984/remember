@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import ru.butakov.remember.entity.Tag;
 import ru.butakov.remember.service.TagService;
 
-import java.util.Comparator;
-import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -22,10 +20,7 @@ public class TagControllerImpl implements TagController {
     @Override
     @GetMapping("/tags")
     public String index(Model model) {
-        List<Tag> tagList = tagService.findAll();
-        tagList.sort(Comparator.comparing(Tag::getTag));
-        model.addAttribute("tags", tagList);
-
+        model.addAttribute("tags", tagService.findAllByOrderByTagAsc());
         return "/tags/index";
     }
 

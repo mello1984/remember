@@ -10,6 +10,9 @@
               integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
               crossorigin="anonymous"/>
 
+        <!-- FontAwesome -->
+        <script src="https://kit.fontawesome.com/c8e5ff18f6.js" crossorigin="anonymous"></script>
+
         <title>${title}</title>
     </head>
     <body>

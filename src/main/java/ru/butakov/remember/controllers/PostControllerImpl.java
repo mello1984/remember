@@ -11,11 +11,13 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
 import ru.butakov.remember.entity.Post;
 import ru.butakov.remember.entity.Tag;
 import ru.butakov.remember.entity.User;
 import ru.butakov.remember.exceptions.NotFoundException;
-import ru.butakov.remember.exceptions.SecurityException;
 import ru.butakov.remember.service.PostService;
 import ru.butakov.remember.service.TagService;
 import ru.butakov.remember.service.UserService;
@@ -23,7 +25,6 @@ import ru.butakov.remember.service.UserService;
 import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
-import java.text.MessageFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -40,36 +41,22 @@ public class PostControllerImpl implements PostController {
     @Value("${upload.path}")
     String uploadPath;
 
-//    @Override
-//    @GetMapping("/posts")
-//    public String index(Model model) {
-//        model.addAttribute("tag", "");
-//        model.addAttribute("posts", postService.findAll());
-//        return "/posts/index";
-//    }
-
     @Override
     @GetMapping("/posts")
-    public String filterByTag(@RequestParam(value = "tag", required = false) String tag,
+    public String filterByTag(@AuthenticationPrincipal User user,
+                              @RequestParam(value = "tag", required = false) String tag,
                               Model model) {
 
         model.addAttribute("tag", tag == null ? "" : tag);
-
-        List<Post> posts = tag == null || tag.isEmpty() ?
-                postService.findAll() :
-                tagService.findByTagOrCreateNew(tag).getPosts();
-        model.addAttribute("posts", posts);
-
-        List<Tag> tags = tagService.findAll();
-        model.addAttribute("tags", tags);
-
+        model.addAttribute("tags", tagService.findAllByOrderByTagAsc());
+        model.addAttribute("posts", postService.postDtoList(tag, user));
         return "/posts/index";
     }
 
     @Override
     @GetMapping("/posts/{id}")
     public String edit(@AuthenticationPrincipal User user, @PathVariable("id") long id, Model model) {
-        Post postFromDb = getPostFromRepoAndCheckAuthor(user, id);
+        Post postFromDb = postService.getPostAndCheckAuthor(user, id);
         String tags = postFromDb.getTags().stream().map(Tag::getTag).collect(Collectors.joining(";"));
 
         model.addAttribute("post", postFromDb);
@@ -124,7 +111,7 @@ public class PostControllerImpl implements PostController {
             return String.format("redirect:/posts/%d", post.getId());
         }
 
-        Post postFromDb = getPostFromRepoAndCheckAuthor(user, id);
+        Post postFromDb = postService.getPostAndCheckAuthor(user, id);
         postFromDb.setText(post.getText());
 
         Set<Tag> tags = getTagSetFromTagString(post);
@@ -147,16 +134,26 @@ public class PostControllerImpl implements PostController {
     @DeleteMapping("/posts/{id}")
     public String deletePost(@AuthenticationPrincipal User user,
                              @PathVariable("id") long id) {
-        Post postFromDb = getPostFromRepoAndCheckAuthor(user, id);
+        Post postFromDb = postService.getPostAndCheckAuthor(user, id);
         postService.delete(postFromDb);
         return "redirect:/posts";
     }
 
-    private Post getPostFromRepoAndCheckAuthor(User authenticatedUser, long id) {
-        Post postFromDb = postService.findById(id).orElseThrow(() -> new NotFoundException(MessageFormat.format("Post with id={0} not found in database", id)));
-        if (!authenticatedUser.equals(postFromDb.getAuthor()))
-            throw new SecurityException(MessageFormat.format("Authenticated user {0} not author of the post {1}", authenticatedUser, postFromDb));
-        return postFromDb;
+    @Override
+    @GetMapping("/posts/{id}/like")
+    public String likePost(@AuthenticationPrincipal User user,
+                           @PathVariable("id") long id,
+                           RedirectAttributes redirectAttributes,
+                           @RequestHeader(required = false) String referer) {
+
+        postService.toggleLike(id, user);
+
+        UriComponents components = UriComponentsBuilder.fromHttpUrl(referer).build();
+        components
+                .getQueryParams()
+                .forEach(redirectAttributes::addAttribute);
+
+        return "redirect:" + components.getPath();
     }
 
     private void updateFile(Post post, MultipartFile newFile) throws IOException {

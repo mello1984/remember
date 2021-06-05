@@ -8,7 +8,7 @@ import java.util.Optional;
 public interface TagService {
     Tag findByTagOrCreateNew(String tag);
 
-    List<Tag> findAll();
+    List<Tag> findAllByOrderByTagAsc();
 
     Optional<Tag> findById(int id);
 

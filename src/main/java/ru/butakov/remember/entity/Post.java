@@ -6,9 +6,7 @@ import lombok.experimental.FieldDefaults;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.time.LocalDate;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
 @Getter
@@ -42,6 +40,13 @@ public class Post {
             inverseJoinColumns = {@JoinColumn(name = "tag_id")}
     )
     Set<Tag> tags = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(
+            name = "post_likes",
+            joinColumns = {@JoinColumn(name = "post_id")},
+            inverseJoinColumns = {@JoinColumn(name = "user_id")})
+    private Set<User> likes = new HashSet<>();
 
 
     public Post(String text, String tag, User user) {

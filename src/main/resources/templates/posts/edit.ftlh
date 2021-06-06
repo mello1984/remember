@@ -13,15 +13,7 @@
                     <div class="m-1"><img src="/img/${post.filename}" alt=""/></div>
                 </#if>
 
-                <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">Upload</span>
-                    </div>
-                    <div class="custom-file">
-                        <input type="file" name="file" class="custom-file-input" id="inputGroupFile01">
-                        <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
-                    </div>
-                </div>
+                <input type="file" class="form-control-file" name="file" id="customFile"/>
 
                 <input type="hidden" name="_csrf" value="${_csrf.token}"/>
                 <button type="submit" class="btn btn-primary m-1">Save</button>

@@ -3,9 +3,13 @@
     <div class="card m-1">
         <div class="card-body">
             <#if p.filename??>
-                <img src="/img/${p.filename}" class="card-img-top">
+                <a href="/img/${p.filename}" class="card-img-top">
+                    <img class="img-fluid" src="/img/${p.filename}" alt="image"/>
+                </a>
             </#if>
-            <span>${p.text}</span><br/>
+
+            <div class="m-0">${p.text}</div>
+
             <#list p.tags as t>
                 <a class="btn btn-outline-secondary" href="/posts?tag=${t.tag}"
                    role="button">${t.tag}</a>

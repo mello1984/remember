@@ -117,6 +117,7 @@ public class PostControllerImpl implements PostController {
         Set<Tag> tags = getTagSetFromTagString(post);
         postFromDb.getTags().clear();
         postFromDb.getTags().addAll(tags);
+        postFromDb.setTag(post.getTag());
 
         if (file != null && !file.isEmpty()) updateFile(postFromDb, file);
         postService.save(postFromDb);
